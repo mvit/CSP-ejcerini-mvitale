@@ -4,21 +4,21 @@ def readargs(ctx, cursor, args):
     if args[0] == '#####':
         return cursor + 1
 
-    if (cursor == 0):
+    if (cursor == 1):
         readvariables(ctx, args)
-    elif (cursor == 1):
-        readvalues(ctx, args)
     elif (cursor == 2):
-        readlimits(ctx, args)
+        readvalues(ctx, args)
     elif (cursor == 3):
-        readunaryinc(ctx, args)
+        readlimits(ctx, args)
     elif (cursor == 4):
-        readunaryex(ctx, args)
+        readunaryinc(ctx, args)
     elif (cursor == 5):
-        readbinaryeq(ctx, args)
+        readunaryex(ctx, args)
     elif (cursor == 6):
-        readbinarynoteq(ctx, args)
+        readbinaryeq(ctx, args)
     elif (cursor == 7):
+        readbinarynoteq(ctx, args)
+    elif (cursor == 8):
         readmutual(ctx, args)
 
     return cursor
