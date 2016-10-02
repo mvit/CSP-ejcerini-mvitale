@@ -88,7 +88,6 @@ def readmutual(csp, args):
                 else:
                     csp['items'][arg].addMutualIncBag(a)
 
-
 def readunaryex(csp, args):
     for arg in args[1:]:
         csp['items'][args[0]].addUnaryEx(arg)
@@ -106,6 +105,9 @@ def readvariables(csp, args):
 
 def readvalues(csp, args):
     csp['bags'][args[0]] = cs.Bag(args[0], int(args[1]))
+
+def selectMostConstrained(csp, state):
+    variables = csp['items']
 
 def main(argv):
 

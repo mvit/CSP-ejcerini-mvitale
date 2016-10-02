@@ -67,8 +67,7 @@ class Bag:
         if len(self.items) > self.maximum_items or len(self.items) < self.minimum_items:
             return False
 
-        return Trus
-
+        return True
 
 class Item:
     name = 'A'                         #The Name of the Item
@@ -141,11 +140,4 @@ class Item:
         print("Inequalities", self.inequality)
         print("Mutually Inclusive Items", self.mutual_inclusive_items)
         print("Mutually Inclusive Bags", self.mutual_inclusive_bags)
-
-
-
-
-
-
-
 
