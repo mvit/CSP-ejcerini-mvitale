@@ -17,13 +17,8 @@ class Bag:
         self.maximum_items = 0
 
     def addToBag(self, item):
-        if item.weight + self.current_weight > self.max_capacity:
-            return -1
 
-        if len(self.items) + 1 > self.maximum_items:
-            return -1
-
-        if item.addValid(self):
+        if self.isConsistent():
             self.items.append(item)
             self.current_weight += item.weight
             item.setCurrentBag(self.name)
@@ -31,6 +26,19 @@ class Bag:
             return -1
 
         return 0
+
+    def isConsistent(self, item):
+
+        if item.weight + self.current_weight > self.max_capacity:
+            return False
+
+        if len(self.items) + 1 > self.maximum_items:
+            return False
+
+        if not item.addValid(self):
+            return False
+
+        return True
 
     def getPercentFull(self):
         return math.round(self.current_weight/self.max_capacity)
@@ -135,8 +143,7 @@ class Item:
 
     def addPossibleBag(self, bag):
 
-        if bag.addToBag(self) is 0:
-            bag.removeItem(self)
+        if bag.isConsistent():
             self.possibleBags.append(bag.name)
             return 0
 
@@ -144,10 +151,8 @@ class Item:
 
     def updatePossibleBags(self, ctx):
         for b in ctx['bags']:
-            if ctx['bags'][b].addToBag(self) < 0:
+            if not ctx['bags'][b].isConsistent():
                 self.possibleBags.remove(b)
-            else:
-                ctx['bags'][b].removeItem(self)
 
     def printItem(self):
         print("Item", self.name)
