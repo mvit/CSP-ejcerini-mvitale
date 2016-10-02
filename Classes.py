@@ -57,6 +57,18 @@ class Bag:
         print("Max Items", self.maximum_items)
         print("Min Items", self.minimum_items)
 
+    def validBag(self):
+        if self.current_weight > self.max_capacity:
+            return False
+
+        if self.getPercentFull() < .9:
+            return False
+
+        if len(self.items) > self.maximum_items or len(self.items) < self.minimum_items:
+            return False
+
+        return Trus
+
 
 class Item:
     name = 'A'                         #The Name of the Item
@@ -67,7 +79,7 @@ class Item:
     inequality = []                    #Items that this object MUST NOT BE IN THE SAME BAG AS
     mutual_inclusive_items = []        #The Items that this Item is in an Inclusivity Group with
     mutual_inclusive_bags = []         #The bags for this Item's Mutual Inclusivity
-    currentBag = '0'                     #The name of the bag the item is currently in. Initialied to 0
+    currentBag = '0'                   #The name of the bag the item is currently in. Initialied to 0
 
     def __init__(self, name, weight):
         self.name = name
