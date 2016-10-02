@@ -4,6 +4,48 @@ import sys, math
 #Local Files
 import Classes as cs
 
+def checkFinalState(ctx):                                         #Checks whether this is valid for the final state.
+    for i in ctx['items']:                                        #Since all of the data is in the items, let's loop through that.
+        item = ctx['items'][i];                                   #For shorthand purposes
+        b = ctx['bags'][ctx['items'][i].currentBag]               #For shorthand purposes
+
+        if b.name not in item.unary_inclusive:                    #Check if the object is in a bag it isn't technically allowed in
+            return False
+
+        if b.name in item.unary_exclusive:                        #Same as the last one.
+            return False
+
+        for e in item.equality:                                   #Check if all objects that should be in this bag are there.
+            if e not in b.items:
+                return False                                      #If not, return false
+
+        for e in item.inequality:                                 #Check if any objects that SHOULDN'T be there are there
+            if e in b.items:
+                return False                                      #If they are, return false
+
+        mutual_inclusivity_bag_copy = item.mutual_inclusive_bags            #Copy these arrays so we can manipulate them without data loss
+        mutual_inclusivity_items_copy = item.mutual_inclusive_items
+
+        while b.name in mutual_inclusivity_bag_copy:
+            mutual_inclusivity_bag_copy.remove(b.name)                      #Remove all instances of the current bag from the list.
+
+        for it in mutual_inclusivity_items_copy:                            #Loop through the mutually inclusive items.
+            if it in b.items:                                               #If it's in the current bag, return false.
+                return False
+            else:
+                if ctx['items'][it].currentBag in mutual_inclusivity_bag_copy:          #If the bag is in the list, remove the first instance.
+                    mutual_inclusivity_bag_copy.remove(ctx['items'][it].currentBag)
+                else:                                                                   #Otherwise, mutual inclusivity failed.
+                    return False
+
+    for b in ctx['bags']:                                          #Loop through the bags to make sure they're all ok.
+        if not ctx['bags'][b].validBag():                          #Check them.
+            return False
+
+    return True
+
+
+
 def readargs(ctx, cursor, args):
     if args[0] == '#####':
         return cursor + 1
