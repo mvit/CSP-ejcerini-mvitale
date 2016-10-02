@@ -23,8 +23,8 @@ def checkFinalState(csp):                                         #Checks whethe
             if e in b.items:
                 return False                                      #If they are, return false
 
-        mutual_inclusivity_bag_copy = item.mutual_inclusive_bags            #Copy these arrays so we can manipulate them without data loss
-        mutual_inclusivity_items_copy = item.mutual_inclusive_items
+        mutual_inclusivity_bag_copy = item.mutual_inclusive_bags.copy()            #Copy these arrays so we can manipulate them without data loss
+        mutual_inclusivity_items_copy = item.mutual_inclusive_items.copy()
 
         while b.name in mutual_inclusivity_bag_copy:
             mutual_inclusivity_bag_copy.remove(b.name)                      #Remove all instances of the current bag from the list.
