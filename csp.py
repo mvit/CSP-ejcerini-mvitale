@@ -109,6 +109,17 @@ def readvalues(csp, args):
 def selectMostConstrained(csp, state):
     variables = csp['items']
 
+def backtrackingSearch(csp):
+    state = csp['bags'].copy()
+    return recusriveBacktreackingSearch(csp, state)
+
+def recusiveBacktrackingSearch(csp, state):
+    if checkFinalState(state) = True :
+        return state
+    item = selectMostConstrained(csp, state)
+    for val in orderDomainValue(item, csp, state):
+        nextState = state.copy()
+
 def main(argv):
 
     csp = {
