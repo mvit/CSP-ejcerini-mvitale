@@ -79,6 +79,7 @@ class Item:
     mutual_inclusive_items = []        #The Items that this Item is in an Inclusivity Group with
     mutual_inclusive_bags = []         #The bags for this Item's Mutual Inclusivity
     currentBag = '0'                   #The name of the bag the item is currently in. Initialied to 0
+    possibleBags = [];
 
     def __init__(self, name, weight):
         self.name = name
@@ -90,6 +91,7 @@ class Item:
         self.mutual_inclusive_items = []
         self.mutual_inclusive_bags = []
         self.currentBag = '0'
+        self.possibleBags = []
 
     def addUnaryIn(self, bagName):
         self.unary_inclusive.append(bagName)
@@ -130,6 +132,22 @@ class Item:
 
     def setCurrentBag(self, bagName):
         self.currentBag = bagName
+
+    def addPossibleBag(self, bag):
+
+        if bag.addToBag(self) is 0:
+            bag.removeItem(self)
+            self.possibleBags.append(bag.name)
+            return 0
+
+        return -1
+
+    def updatePossibleBags(self, ctx):
+        for b in ctx['bags']:
+            if ctx['bags'][b].addToBag(self) < 0:
+                self.possibleBags.remove(b)
+            else:
+                ctx['bags'][b].removeItem(self)
 
     def printItem(self):
         print("Item", self.name)
