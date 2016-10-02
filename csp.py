@@ -9,6 +9,9 @@ def checkFinalState(csp):                                         #Checks whethe
         item = csp['items'][i];                                   #For shorthand purposes
         b = csp['bags'][csp['items'][i].currentBag]               #For shorthand purposes
 
+        if item.currentBag is '0':                                #If an item is not in a bag
+            return False
+
         if b.name not in item.unary_inclusive:                    #Check if the object is in a bag it isn't technically allowed in
             return False
 
@@ -23,7 +26,7 @@ def checkFinalState(csp):                                         #Checks whethe
             if e in b.items:
                 return False                                      #If they are, return false
 
-        mutual_inclusivity_bag_copy = item.mutual_inclusive_bags.copy()            #Copy these arrays so we can manipulate them without data loss
+        mutual_inclusivity_bag_copy = item.mutual_inclusive_bags.copy()     #Copy these arrays so we can manipulate them without data loss
         mutual_inclusivity_items_copy = item.mutual_inclusive_items.copy()
 
         while b.name in mutual_inclusivity_bag_copy:
@@ -43,6 +46,36 @@ def checkFinalState(csp):                                         #Checks whethe
             return False
 
     return True
+
+def mostConstrainedVariable(ctx):
+
+    first = True
+
+    for i in ctx['items']:
+        item = ctx['items'][i]
+        if first:
+            constraints = len(item.possibleBags)
+            mostConstrained = item
+        elif len(item.possibleBags) < constraints:
+            constraints = len(item.possibleBags)
+            mostConstrained = item
+
+    return mostConstrained
+
+def leastConstrainedVariable(csp):
+
+    first = True
+
+    for i in csp['items']:
+        item = csp['items'][i]
+        if first:
+            constraints = len(item.possibleBags)
+            leastConstrained = item
+        elif len(item.possibleBags) > constraints:
+            constraints = len(item.possibleBags)
+            leastConstrained = item
+
+    return leastConstrained
 
 def readargs(csp, cursor, args):
     if args[0] == '#####':
