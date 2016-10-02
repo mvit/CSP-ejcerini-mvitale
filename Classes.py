@@ -143,7 +143,7 @@ class Item:
 
     def addPossibleBag(self, bag):
 
-        if bag.isConsistent():
+        if bag.isConsistent(self):
             self.possibleBags.append(bag.name)
             return 0
 
@@ -151,7 +151,7 @@ class Item:
 
     def updatePossibleBags(self, ctx):
         for b in ctx['bags']:
-            if not ctx['bags'][b].isConsistent():
+            if not ctx['bags'][b].isConsistent(self):
                 self.possibleBags.remove(b)
 
     def printItem(self):
