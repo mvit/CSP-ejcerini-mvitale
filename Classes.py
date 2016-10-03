@@ -40,7 +40,7 @@ class Bag:
         return True
 
     def getPercentFull(self):
-        return round(self.current_weight/self.max_capacity)
+        return float(self.current_weight/self.max_capacity)
 
     def setMinMax(self, min, max):
         self.minimum_items = min
