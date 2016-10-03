@@ -57,12 +57,11 @@ class Bag:
         for i in self.items:
             names.append(i.name)
 
-        print("Bag", self.name)
-        print("Max Capacity", self.max_capacity)
-        print("Current Weight", self.current_weight)
-        print("Items", names)
-        print("Max Items", self.maximum_items)
-        print("Min Items", self.minimum_items)
+        print("{} {}".format(self.name, names))
+        print("Number of Items: {}".format(len(self.items)))
+        print("Total Weight: {}/{}".format(self.current_weight, self.max_capacity))
+        print("Wasted Capacity: {}".format(self.max_capacity - self.current_weight))
+
 
     def validBag(self):
         if self.current_weight > self.max_capacity:
