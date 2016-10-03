@@ -70,7 +70,7 @@ class Bag:
             return False
 
         if self.getPercentFull() < .9:
-            print('percent too full {}'.format(self.getPercentFull()))
+            print('percent not enough {}'.format(self.getPercentFull()))
             return False
 
         if len(self.items) > self.maximum_items or len(self.items) < self.minimum_items:
@@ -155,6 +155,18 @@ class Item:
         for b in self.possibleBags:
             if not ctx['bags'][b].isConsistent(self):
                 self.possibleBags.remove(b)
+
+        sortBags = [];
+        for s in self.possibleBags:
+            sortBags.append(ctx['bags'][s])
+
+        sorted(sortBags, key=getPercentage)
+
+        self.possibleBags = []
+        for s in sortBags:
+            self.possibleBags.append(s)
+
+
     
     def getPossibleBags(self):
         return self.possibleBags
@@ -169,3 +181,6 @@ class Item:
         print("Mutually Inclusive Items", self.mutual_inclusive_items)
         print("Mutually Inclusive Bags", self.mutual_inclusive_bags)
 
+
+def getPercentage(bag):
+    return bag.getPercentFull
