@@ -40,7 +40,7 @@ class Bag:
         return True
 
     def getPercentFull(self):
-        return self.current_weight/float(self.max_capacity)
+        return math.floor(self.current_weight/float(self.max_capacity) * 100)
 
     def setMinMax(self, min, max):
         self.minimum_items = min
@@ -69,7 +69,7 @@ class Bag:
             print('weight exceeded{} {}'.format(self.current_weight, self.max_capacity))
             return False
 
-        if self.getPercentFull() < .9:
+        if self.getPercentFull() < 90:
             print('percent not enough {}'.format(self.getPercentFull()))
             return False
 
@@ -199,5 +199,5 @@ class Item:
 
 def getPercentage(bag):
 
-    print bag.getPercentFull()
+    print(bag.getPercentFull())
     return float(bag.getPercentFull())
