@@ -66,9 +66,11 @@ class Bag:
 
     def validBag(self):
         if self.current_weight > self.max_capacity:
+            print('weight exceeded{} {}'.format(self.current_weight, self.max_capacity))
             return False
 
         if self.getPercentFull() < .9:
+            print('percent too full {}'.format(self.getPercentFull()))
             return False
 
         if len(self.items) > self.maximum_items or len(self.items) < self.minimum_items:

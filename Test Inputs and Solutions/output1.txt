@@ -1,4 +1,0 @@
-a A 
-Number of items: 1
-Total weight: 10/10
-Wasted capacity: 0
