@@ -53,9 +53,9 @@ class Bag:
             item.setCurrentBag('0')
 
     def printBag(self):
-        names = []
+        names = ''
         for i in self.items:
-            names.append(i.name)
+            names = names + i.name + ' ' 
 
         print("{} {}".format(self.name, names))
         print("Number of Items: {}".format(len(self.items)))

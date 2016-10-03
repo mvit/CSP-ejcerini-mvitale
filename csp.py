@@ -158,9 +158,7 @@ def recursiveBacktrackingSearch(csp, state):
          return None
 
     item = mostConstrainedVariable(state)
-    print(item.name)
-    print(item.getPossibleBags(state))
-    
+
     for bag in item.getPossibleBags(state):
         if state['bags'][bag].isConsistent(item):
             nextState = state.copy()
@@ -199,7 +197,7 @@ def main(argv):
 
     for b in winstate['bags']:
         winstate['bags'][b].printBag()
-        print()
+        print('\n')
 
 if __name__ == "__main__":
     main(sys.argv[1:])
