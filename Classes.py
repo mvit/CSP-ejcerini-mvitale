@@ -150,7 +150,7 @@ class Item:
         return -1
 
     def updatePossibleBags(self, ctx):
-        for b in ctx['bags']:
+        for b in self.possibleBags:
             if not ctx['bags'][b].isConsistent(self):
                 self.possibleBags.remove(b)
     
