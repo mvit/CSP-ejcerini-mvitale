@@ -152,15 +152,12 @@ class Item:
         return -1
 
     def updatePossibleBags(self, ctx):
-        print(self.possibleBags)
         for b in self.possibleBags:
             if not ctx['bags'][b].isConsistent(self):
                 self.possibleBags.remove(b)
 
-        print (self.possibleBags)
-        sortBags = [];
+        sortBags = []
         for s in self.possibleBags:
-            print(getPercentage(ctx['bags'][s]))
             sortBags.append(ctx['bags'][s])
 
         sortBags = sorted(sortBags, key=getPercentage)
@@ -169,7 +166,6 @@ class Item:
         for s in sortBags:
             self.possibleBags.append(s.name)
 
-        print (self.possibleBags)
 
 
     def getPossibleBags(self, ctx):
@@ -178,13 +174,9 @@ class Item:
 
         for s in self.possibleBags:
             sortBags.append(ctx['bags'][s])
-        print("sorting")
-        print sortBags
         sortBags = sorted(sortBags, key=getPercentage)
-        print sortBags
         for s in sortBags:
             nameBags.append(s.name)
-        print('done')
         return nameBags
     
     def printItem(self):
@@ -199,6 +191,4 @@ class Item:
 
 
 def getPercentage(bag):
-
-    print(bag.getPercentFull())
     return float(bag.getPercentFull())

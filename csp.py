@@ -162,9 +162,9 @@ def recursiveBacktrackingSearch(csp, state):
     for bag in item.getPossibleBags(state):
         if state['bags'][bag].isConsistent(item):
             state['bags'][bag].addToBag(item)
+            state['items'].pop(item.name)
             for i in state['items']:
                 state['items'][i].updatePossibleBags(state)
-            state['items'].pop(item.name)
             result = recursiveBacktrackingSearch(csp, state)
 
             if result != None :
