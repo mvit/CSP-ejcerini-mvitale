@@ -155,7 +155,7 @@ class Item:
         for b in self.possibleBags:
             if not ctx['bags'][b].isConsistent(self):
                 self.possibleBags.remove(b)
-        sortBags = [];
+        sortBags = []
         for s in self.possibleBags:
             sortBags.append(ctx['bags'][s])
         sortBags = sorted(sortBags, key=getPercentage)

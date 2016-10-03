@@ -169,7 +169,6 @@ def recursiveBacktrackingSearch(csp, state):
                 nextState['items'][i].updatePossibleBags(nextState)
             nextState['items'].pop(item.name)
             result = recursiveBacktrackingSearch(csp, nextState)
-
             if result != None :
                 return result
     return None
