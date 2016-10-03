@@ -152,10 +152,12 @@ class Item:
         return -1
 
     def updatePossibleBags(self, ctx):
+        print(self.possibleBags)
         for b in self.possibleBags:
             if not ctx['bags'][b].isConsistent(self):
                 self.possibleBags.remove(b)
 
+        print (self.possibleBags)
         sortBags = [];
         for s in self.possibleBags:
             sortBags.append(ctx['bags'][s])
@@ -164,7 +166,10 @@ class Item:
 
         self.possibleBags = []
         for s in sortBags:
-            self.possibleBags.append(s)
+            self.possibleBags.append(s.name)
+
+        print (self.possibleBags)
+
 
 
     
