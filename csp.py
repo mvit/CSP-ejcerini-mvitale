@@ -45,7 +45,7 @@ def checkFinalState(state):                                         #Checks whet
     # for b in state['bags']:                                          #Loop through the bags to make sure they're all ok.
     #     if not state['bags'][b].validBag():                          #Check them.
     #         return False
-    print(len(state['items']))
+    #print(len(state['items']))
     if len(state['items']) == 0:
         for b in state['bags']:
             if not state['bags'][b].validBag():
@@ -155,8 +155,8 @@ def recursiveBacktrackingSearch(csp, state):
 
     item = mostConstrainedVariable(state)
     print(item.name)
-
-    for bag in item.getPossibleBags():
+    print(item.getPossibleBags(state))
+    for bag in item.getPossibleBags(state):
         if state['bags'][bag].isConsistent(item):
             state['bags'][bag].addToBag(item)
             item.updatePossibleBags(state)

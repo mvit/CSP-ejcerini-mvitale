@@ -40,7 +40,7 @@ class Bag:
         return True
 
     def getPercentFull(self):
-        return float(self.current_weight/self.max_capacity)
+        return self.current_weight/float(self.max_capacity)
 
     def setMinMax(self, min, max):
         self.minimum_items = min
@@ -171,10 +171,19 @@ class Item:
         print (self.possibleBags)
 
 
+    def getPossibleBags(self, ctx):
+        sortBags = [];
+        nameBags = [];
 
-    
-    def getPossibleBags(self):
-        return self.possibleBags
+        for s in self.possibleBags:
+            sortBags.append(ctx['bags'][s])
+        print("sorting")
+        sorted(sortBags, key=getPercentage)
+
+        for s in sortBags:
+            nameBags.append(s.name)
+        print('done')
+        return nameBags
     
     def printItem(self):
         print("Item", self.name)
@@ -188,4 +197,5 @@ class Item:
 
 
 def getPercentage(bag):
-    return bag.getPercentFull
+    print bag.getPercentFull()
+    return float(bag.getPercentFull())
