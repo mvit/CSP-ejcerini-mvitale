@@ -6,7 +6,7 @@ class Bag:
     current_weight = 0                 #The current weight of the bag
     items = []                         #The items that are in the bag
     minimum_items = 0                  #The minimum number of items in the bag
-    maximum_items = 0                  #The maximum number of items in the bag
+    maximum_items = 9999                  #The maximum number of items in the bag
 
     def __init__(self, name, max_capacity):
         self.name = name
@@ -14,17 +14,16 @@ class Bag:
         self.current_weight = 0
         self.items = []
         self.minimum_items = 0
-        self.maximum_items = 0
+        self.maximum_items = 9999
 
     def addToBag(self, item):
 
-        if self.isConsistent():
+        if self.isConsistent(item):
             self.items.append(item)
             self.current_weight += item.weight
             item.setCurrentBag(self.name)
         else:
             return -1
-
         return 0
 
     def isConsistent(self, item):
@@ -128,13 +127,15 @@ class Item:
             return False
 
         for i in self.inequality:
-            if i.name in bag.items:
-                return False
+            for item in bag.items:
+                if item.name == i:
+                    return False
 
         if bag.name in self.mutual_inclusive_bags:
             for i in self.mutual_inclusive_items:
-                if i.name in bag.items:
-                    return False
+                for item in bag.items:
+                    if item.name == i:
+                        return False
 
         return True
 
@@ -142,7 +143,6 @@ class Item:
         self.currentBag = bagName
 
     def addPossibleBag(self, bag):
-
         if bag.isConsistent(self):
             self.possibleBags.append(bag.name)
             return 0
@@ -153,7 +153,10 @@ class Item:
         for b in ctx['bags']:
             if not ctx['bags'][b].isConsistent(self):
                 self.possibleBags.remove(b)
-
+    
+    def getPossibleBags(self):
+        return self.possibleBags
+    
     def printItem(self):
         print("Item", self.name)
         print("Weight", self.weight)

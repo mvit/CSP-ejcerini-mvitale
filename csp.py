@@ -4,14 +4,15 @@ import sys, math
 #Local Files
 import Classes as cs
 
-def checkFinalState(csp):                                         #Checks whether this is valid for the final state.
-    for i in csp['items']:                                        #Since all of the data is in the items, let's loop through that.
-        item = csp['items'][i];                                   #For shorthand purposes
-        b = csp['bags'][csp['items'][i].currentBag]               #For shorthand purposes
+def checkFinalState(state):                                         #Checks whether this is valid for the final state.
+    for i in state['items']:                                        #Since all of the data is in the items, let's loop through that.
+        item = state['items'][i];                                   #For shorthand purposes
 
         if item.currentBag is '0':                                #If an item is not in a bag
             return False
 
+        b = state['bags'][state['items'][i].currentBag]               #For shorthand purposes
+        
         if b.name not in item.unary_inclusive:                    #Check if the object is in a bag it isn't technically allowed in
             return False
 
@@ -36,23 +37,23 @@ def checkFinalState(csp):                                         #Checks whethe
             if it in b.items:                                               #If it's in the current bag, return false.
                 return False
             else:
-                if csp['items'][it].currentBag in mutual_inclusivity_bag_copy:          #If the bag is in the list, remove the first instance.
-                    mutual_inclusivity_bag_copy.remove(csp['items'][it].currentBag)
+                if state['items'][it].currentBag in mutual_inclusivity_bag_copy:          #If the bag is in the list, remove the first instance.
+                    mutual_inclusivity_bag_copy.remove(state['items'][it].currentBag)
                 else:                                                                   #Otherwise, mutual inclusivity failed.
                     return False
 
-    for b in csp['bags']:                                          #Loop through the bags to make sure they're all ok.
-        if not csp['bags'][b].validBag():                          #Check them.
+    for b in state['bags']:                                          #Loop through the bags to make sure they're all ok.
+        if not state['bags'][b].validBag():                          #Check them.
             return False
 
     return True
 
-def mostConstrainedVariable(ctx):
+def mostConstrainedVariable(state):
 
     first = True
 
-    for i in ctx['items']:
-        item = ctx['items'][i]
+    for i in state['items']:
+        item = state['items'][i]
         if first:
             constraints = len(item.possibleBags)
             mostConstrained = item
@@ -62,12 +63,12 @@ def mostConstrainedVariable(ctx):
 
     return mostConstrained
 
-def leastConstrainedVariable(csp):
+def leastConstrainedVariable(state):
 
     first = True
 
-    for i in csp['items']:
-        item = csp['items'][i]
+    for i in state['items']:
+        item = state['items'][i]
         if first:
             constraints = len(item.possibleBags)
             leastConstrained = item
@@ -139,19 +140,28 @@ def readvariables(csp, args):
 def readvalues(csp, args):
     csp['bags'][args[0]] = cs.Bag(args[0], int(args[1]))
 
-def selectMostConstrained(csp, state):
-    variables = csp['items']
-
 def backtrackingSearch(csp):
-    state = csp['bags'].copy()
-    return recusriveBacktreackingSearch(csp, state)
+    state = csp.copy()
+    return recursiveBacktrackingSearch(csp, state)
 
-def recusiveBacktrackingSearch(csp, state):
-    if checkFinalState(state) = True :
+def recursiveBacktrackingSearch(csp, state):
+    if checkFinalState(state) == True :
         return state
-    item = selectMostConstrained(csp, state)
-    for val in orderDomainValue(item, csp, state):
-        nextState = state.copy()
+
+    item = mostConstrainedVariable(state)
+    print(item.name)
+
+    for bag in item.getPossibleBags():
+        state['bags'][bag].printBag()
+        if state['bags'][bag].isConsistent(item):
+            state['bags'][bag].addToBag(item)
+            item.updatePossibleBags(state)
+            result = recursiveBacktrackingSearch(csp, state)
+            if result != None :
+                return result
+        print(state['items'])
+        state['items'].pop(item.name)
+    return None
 
 def main(argv):
 
@@ -161,38 +171,20 @@ def main(argv):
     }
 
     with open(argv[0], 'r') as file:
-
         cursor = 0
 
         for line in file:
             args = line.strip().split()
             cursor = readargs(csp, cursor, args)
 
+        for i in csp['items']:
+            for b in csp['bags']:
+                csp['items'][i].addPossibleBag(csp['bags'][b])
 
-    if csp['bags']['b'].addToBag(csp['items']['G']) is -1:
-        print()
-        print("G could not be added to b")
+    winstate = backtrackingSearch(csp);
 
-    if csp['bags']['b'].addToBag(csp['items']['E']) is -1:
-        print()
-        print("E could not be added to b")
-
-    if csp['bags']['c'].addToBag(csp['items']['G']) is -1:
-        print()
-        print("G could not be added to c")
-
-    if csp['bags']['a'].addToBag(csp['items']['C']) is -1:
-        print()
-        print("C could not be added to a")
-
-    print()
-
-    for b in csp['bags']:
-        csp['bags'][b].printBag()
-        print()
-
-    for i in csp['items']:
-        csp['items'][i].printItem()
+    for b in winstate:
+        b.printBag()
         print()
 
 if __name__ == "__main__":
