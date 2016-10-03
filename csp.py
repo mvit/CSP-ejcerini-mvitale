@@ -5,48 +5,53 @@ import sys, math
 import Classes as cs
 
 def checkFinalState(state):                                         #Checks whether this is valid for the final state.
-    for i in state['items']:                                        #Since all of the data is in the items, let's loop through that.
-        item = state['items'][i];                                   #For shorthand purposes
-
-        if item.currentBag is '0':                                #If an item is not in a bag
-            return False
-
-        b = state['bags'][state['items'][i].currentBag]               #For shorthand purposes
-        
-        if b.name not in item.unary_inclusive:                    #Check if the object is in a bag it isn't technically allowed in
-            return False
-
-        if b.name in item.unary_exclusive:                        #Same as the last one.
-            return False
-
-        for e in item.equality:                                   #Check if all objects that should be in this bag are there.
-            if e not in b.items:
-                return False                                      #If not, return false
-
-        for e in item.inequality:                                 #Check if any objects that SHOULDN'T be there are there
-            if e in b.items:
-                return False                                      #If they are, return false
-
-        mutual_inclusivity_bag_copy = item.mutual_inclusive_bags.copy()     #Copy these arrays so we can manipulate them without data loss
-        mutual_inclusivity_items_copy = item.mutual_inclusive_items.copy()
-
-        while b.name in mutual_inclusivity_bag_copy:
-            mutual_inclusivity_bag_copy.remove(b.name)                      #Remove all instances of the current bag from the list.
-
-        for it in mutual_inclusivity_items_copy:                            #Loop through the mutually inclusive items.
-            if it in b.items:                                               #If it's in the current bag, return false.
+    # for i in state['items']:                                        #Since all of the data is in the items, let's loop through that.
+    #     item = state['items'][i];                                   #For shorthand purposes
+    #
+    #     if item.currentBag is '0':                                #If an item is not in a bag
+    #         return False
+    #
+    #     b = state['bags'][state['items'][i].currentBag]               #For shorthand purposes
+    #
+    #     if b.name not in item.unary_inclusive:                    #Check if the object is in a bag it isn't technically allowed in
+    #         return False
+    #
+    #     if b.name in item.unary_exclusive:                        #Same as the last one.
+    #         return False
+    #
+    #     for e in item.equality:                                   #Check if all objects that should be in this bag are there.
+    #         if e not in b.items:
+    #             return False                                      #If not, return false
+    #
+    #     for e in item.inequality:                                 #Check if any objects that SHOULDN'T be there are there
+    #         if e in b.items:
+    #             return False                                      #If they are, return false
+    #
+    #     mutual_inclusivity_bag_copy = item.mutual_inclusive_bags.copy()     #Copy these arrays so we can manipulate them without data loss
+    #     mutual_inclusivity_items_copy = item.mutual_inclusive_items.copy()
+    #
+    #     while b.name in mutual_inclusivity_bag_copy:
+    #         mutual_inclusivity_bag_copy.remove(b.name)                      #Remove all instances of the current bag from the list.
+    #
+    #     for it in mutual_inclusivity_items_copy:                            #Loop through the mutually inclusive items.
+    #         if it in b.items:                                               #If it's in the current bag, return false.
+    #             return False
+    #         else:
+    #             if state['items'][it].currentBag in mutual_inclusivity_bag_copy:          #If the bag is in the list, remove the first instance.
+    #                 mutual_inclusivity_bag_copy.remove(state['items'][it].currentBag)
+    #             else:                                                                   #Otherwise, mutual inclusivity failed.
+    #                 return False
+    #
+    # for b in state['bags']:                                          #Loop through the bags to make sure they're all ok.
+    #     if not state['bags'][b].validBag():                          #Check them.
+    #         return False
+    print(len(state['items']))
+    if len(state['items']) == 0:
+        for b in state['bags']:
+            if not state['bags'][b].validBag():
                 return False
-            else:
-                if state['items'][it].currentBag in mutual_inclusivity_bag_copy:          #If the bag is in the list, remove the first instance.
-                    mutual_inclusivity_bag_copy.remove(state['items'][it].currentBag)
-                else:                                                                   #Otherwise, mutual inclusivity failed.
-                    return False
-
-    for b in state['bags']:                                          #Loop through the bags to make sure they're all ok.
-        if not state['bags'][b].validBag():                          #Check them.
-            return False
-
-    return True
+        return True
+    return False
 
 def mostConstrainedVariable(state):
 
@@ -152,15 +157,14 @@ def recursiveBacktrackingSearch(csp, state):
     print(item.name)
 
     for bag in item.getPossibleBags():
-        state['bags'][bag].printBag()
         if state['bags'][bag].isConsistent(item):
             state['bags'][bag].addToBag(item)
             item.updatePossibleBags(state)
+            state['items'].pop(item.name)
             result = recursiveBacktrackingSearch(csp, state)
+
             if result != None :
                 return result
-        print(state['items'])
-        state['items'].pop(item.name)
     return None
 
 def main(argv):
@@ -183,8 +187,8 @@ def main(argv):
 
     winstate = backtrackingSearch(csp);
 
-    for b in winstate:
-        b.printBag()
+    for b in winstate['bags']:
+        winstate['bags'][b].printBag()
         print()
 
 if __name__ == "__main__":
