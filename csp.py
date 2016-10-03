@@ -62,10 +62,10 @@ def mostConstrainedVariable(state):
         if first:
             constraints = len(item.possibleBags)
             mostConstrained = item
+            first = False
         elif len(item.possibleBags) < constraints:
             constraints = len(item.possibleBags)
             mostConstrained = item
-
     return mostConstrained
 
 def leastConstrainedVariable(state):
@@ -77,6 +77,7 @@ def leastConstrainedVariable(state):
         if first:
             constraints = len(item.possibleBags)
             leastConstrained = item
+            first = False
         elif len(item.possibleBags) > constraints:
             constraints = len(item.possibleBags)
             leastConstrained = item
@@ -154,18 +155,20 @@ def recursiveBacktrackingSearch(csp, state):
         return state
 
     if len(state['items']) <= 0:
-        return None
+         return None
 
     item = mostConstrainedVariable(state)
     print(item.name)
     print(item.getPossibleBags(state))
+    
     for bag in item.getPossibleBags(state):
         if state['bags'][bag].isConsistent(item):
-            state['bags'][bag].addToBag(item)
-            for i in state['items']:
-                state['items'][i].updatePossibleBags(state)
-            state['items'].pop(item.name)
-            result = recursiveBacktrackingSearch(csp, state)
+            nextState = state.copy()
+            nextState['bags'][bag].addToBag(item)
+            for i in nextState['items']:
+                nextState['items'][i].updatePossibleBags(nextState)
+            nextState['items'].pop(item.name)
+            result = recursiveBacktrackingSearch(csp, nextState)
 
             if result != None :
                 return result
