@@ -163,7 +163,7 @@ class Item:
             print(getPercentage(ctx['bags'][s]))
             sortBags.append(ctx['bags'][s])
 
-        sorted(sortBags, key=getPercentage)
+        sortBags = sorted(sortBags, key=getPercentage)
 
         self.possibleBags = []
         for s in sortBags:
@@ -179,8 +179,9 @@ class Item:
         for s in self.possibleBags:
             sortBags.append(ctx['bags'][s])
         print("sorting")
-        sorted(sortBags, key=getPercentage)
-
+        print sortBags
+        sortBags = sorted(sortBags, key=getPercentage)
+        print sortBags
         for s in sortBags:
             nameBags.append(s.name)
         print('done')
