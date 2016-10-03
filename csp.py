@@ -153,13 +153,17 @@ def recursiveBacktrackingSearch(csp, state):
     if checkFinalState(state) == True :
         return state
 
+    if len(state['items']) <= 0:
+        return None
+
     item = mostConstrainedVariable(state)
     print(item.name)
 
     for bag in item.getPossibleBags():
         if state['bags'][bag].isConsistent(item):
             state['bags'][bag].addToBag(item)
-            item.updatePossibleBags(state)
+            for i in state['items']:
+                state['items'][i].updatePossibleBags(state)
             state['items'].pop(item.name)
             result = recursiveBacktrackingSearch(csp, state)
 
@@ -186,6 +190,10 @@ def main(argv):
                 csp['items'][i].addPossibleBag(csp['bags'][b])
 
     winstate = backtrackingSearch(csp);
+
+    if winstate == None:
+        print("No Result Found")
+        return -1
 
     for b in winstate['bags']:
         winstate['bags'][b].printBag()

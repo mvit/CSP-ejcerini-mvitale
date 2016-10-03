@@ -10,8 +10,8 @@ class Bag:
 
     def __init__(self, name, max_capacity):
         self.name = name
-        self.max_capacity = max_capacity
-        self.current_weight = 0
+        self.max_capacity = float(max_capacity)
+        self.current_weight = 0.0
         self.items = []
         self.minimum_items = 0
         self.maximum_items = 9999
@@ -160,6 +160,7 @@ class Item:
         print (self.possibleBags)
         sortBags = [];
         for s in self.possibleBags:
+            print(getPercentage(ctx['bags'][s]))
             sortBags.append(ctx['bags'][s])
 
         sorted(sortBags, key=getPercentage)
@@ -188,4 +189,4 @@ class Item:
 
 
 def getPercentage(bag):
-    return bag.getPercentFull
+    return bag.getPercentFull()
